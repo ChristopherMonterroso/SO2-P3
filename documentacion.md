@@ -66,7 +66,7 @@ struct memory_limit_entry {
 **1. SYS\_CHRIS\_ADD\_MEMORY\_LIMIT (557):** Agrega un proceso a la lista de procesos limitados.
 
 ```
-long SYSCALL_DEFINEx(SYS_CHRIS_ADD_MEMORY_LIMIT, pid_t, process_pid, size_t, memory_limit);
+long SYSCALL_DEFINE2(SYS_CHRIS_ADD_MEMORY_LIMIT, pid_t, process_pid, size_t, memory_limit);
 ```
 
 * **Errores manejados:**
@@ -77,7 +77,7 @@ long SYSCALL_DEFINEx(SYS_CHRIS_ADD_MEMORY_LIMIT, pid_t, process_pid, size_t, mem
 **2. SYS\_CHRIS\_GET\_MEMORY\_LIMITS (558):** Obtiene la lista de procesos limitados.
 
 ```
-long SYSCALL_DEFINEx(SYS_CHRIS_GET_MEMORY_LIMITS, struct memory_limitation*, size_t, max_entries);
+long SYSCALL_DEFINE3(SYS_CHRIS_GET_MEMORY_LIMITS, struct memory_limitation*, size_t, max_entries);
 ```
 
 * **Errores manejados:**
@@ -87,7 +87,7 @@ long SYSCALL_DEFINEx(SYS_CHRIS_GET_MEMORY_LIMITS, struct memory_limitation*, siz
 **3. SYS\_CHRIS\_UPDATE\_MEMORY\_LIMIT (559):** Actualiza el límite de memoria de un proceso existente.
 
 ```
-long SYSCALL_DEFINEx(SYS_CHRIS_UPDATE_MEMORY_LIMIT, pid_t, process_pid, size_t, memory_limit);
+long SYSCALL_DEFINE2(SYS_CHRIS_UPDATE_MEMORY_LIMIT, pid_t, process_pid, size_t, memory_limit);
 ```
 
 * **Errores manejados:**
@@ -97,7 +97,7 @@ long SYSCALL_DEFINEx(SYS_CHRIS_UPDATE_MEMORY_LIMIT, pid_t, process_pid, size_t, 
 **4. SYS\_CHRIS\_REMOVE\_MEMORY\_LIMIT (560):** Elimina un proceso de la lista de procesos limitados.
 
 ```
-long SYSCALL_DEFINEx(SYS_CHRIS_REMOVE_MEMORY_LIMIT, pid_t, process_pid);
+long SYSCALL_DEFINE1(SYS_CHRIS_REMOVE_MEMORY_LIMIT, pid_t, process_pid);
 ```
 
 * **Errores manejados:**
@@ -114,8 +114,6 @@ Se realizaron pruebas con scripts en C para validar el funcionamiento de las sys
 | 1234    | 50 MB              | 40 MB            | Bloqueado por límite |
 | 5678    | 30 MB              | 50 MB            | Aprobado              |
 
----
-
 ## Problemas encontrados
 
 
@@ -123,8 +121,6 @@ Se realizaron pruebas con scripts en C para validar el funcionamiento de las sys
 | ------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | Kernel panic al agregar procesos repetidos | Falta de validación antes de insertar en la lista.       | Se agregó verificación para evitar duplicados en la lista                     |
 | Error al obtener la lista de procesos      | Buffer insuficiente para la cantidad de datos retornados. | Se validó el tamaño del buffer y se informa sobre el tamaño quie se necesita |
-
----
 
 ## Cronograma
 
@@ -145,12 +141,6 @@ Se realizaron pruebas con scripts en C para validar el funcionamiento de las sys
 **Día 3:** Se añadieron validaciones para evitar errores.
 
 **Día 4:** Se realizaron pruebas, se documentaron errores encontrados y se terminó la documentación.
-
----
-
-## 
-
-
 
 ## Reflexión personal
 
